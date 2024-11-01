@@ -38,6 +38,7 @@
 }
 
 .output {
+  font-family: monospace;
   width: 100%;
   max-width: 400px;
   display: block;
