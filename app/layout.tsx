@@ -16,7 +16,7 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Board Game Tools',
+  title: 'Board game tools',
 };
 
 export default function RootLayout({
