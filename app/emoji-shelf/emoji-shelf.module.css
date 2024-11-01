@@ -1,0 +1,26 @@
+.builder {
+  margin: 32px auto;
+  display: grid;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: scroll;
+  /* width: clamp(0px, 100vw, 400px);
+  height: clamp(0px, 100vw, 400px); */
+}
+
+.input {
+  font-size: 2rem;
+  width: 100%;
+  aspect-ratio: 1;
+  text-align: center;
+}
+
+.output {
+  width: 100%;
+  display: block;
+  margin: 32px auto;
+  overflow: scroll;
+  resize: none;
+  white-space: nowrap;
+  font-size: 1rem;
+}
