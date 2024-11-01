@@ -43,6 +43,6 @@
   margin: 32px auto;
   overflow: scroll;
   resize: none;
-  white-space: nowrap;
+  white-space: pre;
   font-size: 1rem;
 }
