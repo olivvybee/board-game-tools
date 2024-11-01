@@ -1,0 +1,10 @@
+.stepper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.value {
+  min-width: 48px;
+  text-align: center;
+}

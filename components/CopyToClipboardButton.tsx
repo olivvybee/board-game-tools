@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useCopyToClipboard } from 'usehooks-ts';
+import { IoCheckmark, IoCopyOutline } from 'react-icons/io5';
+
+import { Button } from './Button';
 
 export interface CopyToClipboardButtonProps {
   value: string;
@@ -23,5 +26,9 @@ export const CopyToClipboardButton = ({
     }, 3000);
   };
 
-  return <button onClick={onClick}>{hasCopied ? 'Copied' : text}</button>;
+  return (
+    <Button icon={hasCopied ? IoCheckmark : IoCopyOutline} onClick={onClick}>
+      {hasCopied ? 'Copied' : text}
+    </Button>
+  );
 };

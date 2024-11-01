@@ -1,6 +1,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --primary: rgb(183, 154, 255);
+  --primary-hover: rgb(194, 169, 255);
+  --primary-active: rgb(172, 139, 255);
+  --primary-muted: rgb(71, 60, 97);
 }
 
 @media (prefers-color-scheme: dark) {

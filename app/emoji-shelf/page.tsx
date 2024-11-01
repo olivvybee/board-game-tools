@@ -9,6 +9,7 @@ import { useLocalStorage } from 'usehooks-ts';
 import { generateShelf } from './generateShelf';
 import styles from './emoji-shelf.module.css';
 import { CopyToClipboardButton } from '@/components/CopyToClipboardButton';
+import { Stepper } from '@/components/Stepper';
 
 const buildEmptyEmojis = (width: number, height: number) =>
   _range(width).map(() => _range(height).map(() => ''));
@@ -29,28 +30,35 @@ const EmojiShelfPage = () => {
   };
 
   const addRow = () => {
-    const newRow = _fill(Array(width), '');
-    const newEmojis = [...emojis, newRow];
-
-    setEmojis(newEmojis);
-    setHeight(height + 1);
-  };
-
-  const removeRow = () => {
-    setHeight(height - 1);
+    if (emojis.length <= height) {
+      const newRow = _fill(Array(width), '');
+      const newEmojis = [...emojis, newRow];
+      setEmojis(newEmojis);
+    }
   };
 
   const addColumn = () => {
-    const newEmojis = [...emojis];
-    for (let y = 0; y < height; y++) {
-      newEmojis[y].push('');
+    if (emojis[0].length <= width) {
+      const newEmojis = [...emojis];
+      for (let y = 0; y < height; y++) {
+        newEmojis[y].push('');
+      }
+      setEmojis(newEmojis);
     }
-    setWidth(width + 1);
-    setEmojis(newEmojis);
   };
 
-  const removeColumn = () => {
-    setWidth(width - 1);
+  const onRowsChange = (newValue: number) => {
+    if (newValue > height) {
+      addRow();
+    }
+    setHeight(newValue);
+  };
+
+  const onColumnsChange = (newValue: number) => {
+    if (newValue > width) {
+      addColumn();
+    }
+    setWidth(newValue);
   };
 
   const shelf = generateShelf({
@@ -78,19 +86,21 @@ const EmojiShelfPage = () => {
         previous layout of your shelf will be saved when you come back.
       </p>
 
-      <div>
-        <button disabled={height >= 10} onClick={addRow}>
-          Add row
-        </button>
-        <button disabled={height <= 1} onClick={removeRow}>
-          Remove row
-        </button>
-        <button disabled={width >= 10} onClick={addColumn}>
-          Add column
-        </button>
-        <button disabled={width <= 1} onClick={removeColumn}>
-          Remove column
-        </button>
+      <div className={styles.config}>
+        <div className={styles.configItem}>
+          Rows
+          <Stepper value={height} onChange={onRowsChange} min={1} max={10} />
+        </div>
+
+        <div className={styles.configItem}>
+          Columns
+          <Stepper value={width} onChange={onColumnsChange} min={1} max={10} />
+        </div>
+
+        <div className={styles.configItem}>
+          Font size
+          <Stepper value={fontSize} onChange={setFontSize} min={12} max={20} />
+        </div>
       </div>
 
       <div
@@ -111,14 +121,19 @@ const EmojiShelfPage = () => {
         )}
       </div>
 
-      <CopyToClipboardButton value={shelf} text="Copy BGG code to clipboard" />
+      <div className={styles.result}>
+        <CopyToClipboardButton
+          value={shelf}
+          text="Copy BGG code to clipboard"
+        />
 
-      <textarea
-        className={styles.output}
-        style={{ height: `${height * 3 * 16}px` }}
-        value={shelf.trim()}
-        onFocus={(e) => e.target.select()}
-      />
+        <textarea
+          className={styles.output}
+          style={{ height: `${height * 3 * 16}px` }}
+          value={shelf.trim()}
+          onFocus={(e) => e.target.select()}
+        />
+      </div>
     </>
   );
 };
