@@ -20,7 +20,7 @@ export const EmojiShelfBuilder = () => {
   const [fontSize, setFontSize] = useLocalStorage('emoji-shelf-font-size', 18);
   const [emojis, setEmojis] = useLocalStorage<string[][]>(
     'emoji-shelf-emojis',
-    buildEmptyEmojis(width, height)
+    buildEmptyEmojis(width, height),
   );
 
   const setEmoji = (emoji: string, x: number, y: number) => {
@@ -101,7 +101,7 @@ export const EmojiShelfBuilder = () => {
               value={emojis[y][x]}
               onChange={(e) => setEmoji(e.target.value, x, y)}
             />
-          ))
+          )),
         )}
       </div>
 
@@ -116,6 +116,7 @@ export const EmojiShelfBuilder = () => {
           style={{ height: `${height * 3 * 16}px` }}
           value={shelf.trim()}
           onFocus={(e) => e.target.select()}
+          readOnly={true}
         />
       </div>
     </>
