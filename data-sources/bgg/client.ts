@@ -3,6 +3,7 @@ import { URLSearchParams } from 'url';
 import _chunk from 'lodash/chunk';
 
 import { Play } from './entities/Play';
+import { PlaysResponse } from './responses/plays';
 
 export const BASE_URL = 'https://boardgamegeek.com';
 export const MAX_RETRY_LIMIT = 6;
@@ -21,21 +22,43 @@ export class BGGClient {
   }) {
     const { username, startDate, endDate } = params;
 
-    return this.makeXmlV2Request<{ plays: Play[] }>(
+    const searchParams = {
+      username,
+      mindate: startDate
+        ? new Date(startDate).toISOString().slice(0, 10)
+        : undefined,
+      maxdate: endDate
+        ? new Date(endDate).toISOString().slice(0, 10)
+        : undefined,
+    };
+
+    const initialResult = await this.makeXmlV2Request<PlaysResponse>(
       'plays',
-      {
-        username,
-        mindate: startDate
-          ? new Date(startDate).toISOString().slice(0, 10)
-          : undefined,
-        maxdate: endDate
-          ? new Date(endDate).toISOString().slice(0, 10)
-          : undefined,
-      },
+      searchParams,
       {
         isArray: (tagName) => tagName === 'player',
       },
     );
+
+    const { play: plays, total } = initialResult.plays;
+
+    const pages = Math.ceil(total / 100);
+    for (let page = 2; page <= pages; page++) {
+      const nextResult = await this.makeXmlV2Request<PlaysResponse>(
+        'plays',
+        {
+          ...searchParams,
+          page: page.toString(),
+        },
+        {
+          isArray: (tagName) => tagName === 'player',
+        },
+      );
+
+      nextResult.plays.play.forEach((play) => plays.push(play));
+    }
+
+    return plays;
   }
 
   private async makeRequest<TResponse>(path: string): Promise<string> {
