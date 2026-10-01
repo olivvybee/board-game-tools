@@ -27,17 +27,19 @@ export const processPlays = (plays: Play[], year: number): SolotoberDay[] => {
     (play) => isInSolotober(play, year) && isSoloPlay(play),
   );
 
-  return soloPlaysInMonth.map((play) => {
-    const gameId = play.item.objectid;
-    const date = new Date(play.date);
+  return soloPlaysInMonth
+    .map((play) => {
+      const gameId = play.item.objectid;
+      const date = new Date(play.date);
 
-    return {
-      day: date.getUTCDate(),
-      gameId: play.item.objectid,
-      gameName: play.item.name,
-      duration: play.length,
-      isNewGame: !previouslyPlayedGames.has(gameId),
-      isNewSoloGame: !previousSoloGames.has(gameId),
-    };
-  });
+      return {
+        day: date.getUTCDate(),
+        gameId: play.item.objectid,
+        gameName: play.item.name,
+        duration: play.length,
+        isNewGame: !previouslyPlayedGames.has(gameId),
+        isNewSoloGame: !previousSoloGames.has(gameId),
+      };
+    })
+    .toSorted((a, b) => a.day - b.day);
 };
