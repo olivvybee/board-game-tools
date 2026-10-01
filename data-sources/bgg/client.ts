@@ -4,6 +4,8 @@ import _chunk from 'lodash/chunk';
 
 import { Play } from './entities/Play';
 import { PlaysResponse } from './responses/plays';
+import { Game } from './entities/Game';
+import { GamesResponse } from './responses/games';
 
 export const BASE_URL = 'https://boardgamegeek.com';
 export const MAX_RETRY_LIMIT = 6;
@@ -13,6 +15,38 @@ export class BGGClient {
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
+  }
+
+  public async games(params: { gameIds: number[] }) {
+    const { gameIds } = params;
+
+    const games: Game[] = [];
+    const chunks = _chunk(gameIds, 20);
+
+    for (let chunk of chunks) {
+      const searchParams = {
+        id: chunk.join(','),
+        thing: 'boardgame',
+      };
+
+      const response = await this.makeXmlV2Request<GamesResponse>(
+        'thing',
+        searchParams,
+        {
+          isArray: (tagName) => ['item', 'name'].includes(tagName),
+        },
+      );
+
+      if (!response) {
+        throw new Error('No data returned from BGG');
+      }
+
+      response.items.item.forEach((game) => {
+        games.push(game);
+      });
+    }
+
+    return games;
   }
 
   public async plays(params: {
