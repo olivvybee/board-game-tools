@@ -5,6 +5,7 @@ import { Play } from '@/data-sources/bgg/entities/Play';
 import { processPlays } from './processPlays';
 import { buildMarkup } from './buildMarkup';
 import { CopyToClipboardButton } from '@/components/CopyToClipboardButton';
+import { fetchGameImages } from './fetchGameImages';
 
 const SolotoberPage = async () => {
   loadEnv({ quiet: true });
@@ -21,7 +22,9 @@ const SolotoberPage = async () => {
 
   const solotoberDays = processPlays(plays, year);
 
-  const markup = buildMarkup(solotoberDays);
+  const gameImages = await fetchGameImages(client, solotoberDays);
+
+  const markup = buildMarkup(solotoberDays, gameImages);
 
   return (
     <div>

@@ -1,13 +1,19 @@
 import { SolotoberDay } from './types';
 
-export const buildMarkup = (days: SolotoberDay[]) => {
+export const buildMarkup = (
+  days: SolotoberDay[],
+  images: Record<number, string>,
+) => {
   const daysMarkup = days
-    .map((data) =>
-      `
-[b]${data.day.toString().padStart(2, '0')} - [thing=${data.gameId}][/thing][/b] ${data.isNewGame ? '🆕' : data.isNewSoloGame ? '1️⃣' : ''}
-[floatleft][imageid=6452395 square inline][/floatleft]Description goes here[clear]
-`.trim(),
-    )
+    .map((data) => {
+      const { day, gameId, isNewGame, isNewSoloGame } = data;
+      const imageId = images[data.gameId];
+
+      return `
+[b]${day.toString().padStart(2, '0')} - [thing=${gameId}][/thing][/b] ${isNewGame ? '🆕' : isNewSoloGame ? '1️⃣' : ''}
+[floatleft][imageid=${imageId || 6452395} square inline][/floatleft]Description goes here[clear]
+`.trim();
+    })
     .join('\n');
 
   const daysPlayed = days.length;
