@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { useCopyToClipboard } from 'usehooks-ts';
 import { IoCheckmark, IoCopyOutline } from 'react-icons/io5';
