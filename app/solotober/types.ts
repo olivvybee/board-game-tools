@@ -8,3 +8,8 @@ export type SolotoberDay = {
   isNewSoloGame: boolean;
   duration: number;
 };
+
+export type GameImage = {
+  id: number;
+  url: string;
+};

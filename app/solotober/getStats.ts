@@ -1,21 +1,6 @@
 import { SolotoberDay } from './types';
 
-export const buildMarkup = (
-  days: SolotoberDay[],
-  images: Record<number, string>,
-) => {
-  const daysMarkup = days
-    .map((data) => {
-      const { day, gameId, isNewGame, isNewSoloGame } = data;
-      const imageId = images[data.gameId];
-
-      return `
-[b]${day.toString().padStart(2, '0')} - [thing=${gameId}][/thing][/b] ${isNewGame ? '🆕' : isNewSoloGame ? '1️⃣' : ''}
-[floatleft][imageid=${imageId || 6452395} square inline][/floatleft]Description goes here[clear]
-`.trim();
-    })
-    .join('\n');
-
+export const getStats = (days: SolotoberDay[]) => {
   const daysPlayed = days.length;
   const gamesPlayed = new Set(days.map((data) => data.gameId)).size;
   const newGames = days.filter((data) => data.isNewGame).length;
@@ -27,9 +12,7 @@ export const buildMarkup = (
   const hours = Math.floor(totalTime / 60);
   const minutes = totalTime % 60;
 
-  const stats = `
-[heading]Stats[/heading]
-
+  const markup = `
 Days played: ${daysPlayed} ${daysPlayed === 31 ? '🎉' : ''}
 Different games played: ${gamesPlayed} ${gamesPlayed === 31 ? '🎉' : ''}
 New-to-me games: ${newGames}
@@ -37,5 +20,12 @@ New-to-me-solo games: ${newSoloGames}
 Total time spent playing: ${hours}h ${minutes}m
   `.trim();
 
-  return daysMarkup + '\n' + stats;
+  return {
+    daysPlayed,
+    gamesPlayed,
+    newGames,
+    newSoloGames,
+    time: `${hours}h ${minutes}m`,
+    markup,
+  };
 };

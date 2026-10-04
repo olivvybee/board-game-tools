@@ -41,5 +41,5 @@ export const processPlays = (plays: Play[], year: number): SolotoberDay[] => {
         isNewSoloGame: !previousSoloGames.has(gameId),
       };
     })
-    .toSorted((a, b) => a.day - b.day);
+    .toSorted((a, b) => b.day - a.day);
 };

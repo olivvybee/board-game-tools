@@ -1,6 +1,6 @@
 import _uniq from 'lodash/uniq';
 import { BGGClient } from '@/data-sources/bgg/client';
-import { SolotoberDay } from './types';
+import { GameImage, SolotoberDay } from './types';
 
 export const fetchGameImages = async (
   client: BGGClient,
@@ -14,10 +14,13 @@ export const fetchGameImages = async (
       const thumbnailUrl = game.thumbnail;
       const match = thumbnailUrl.match(/pic(\d+)\.(png|jpg)/);
       if (match) {
-        processed[game.id] = match[1];
+        processed[game.id] = {
+          id: parseInt(match[1]),
+          url: thumbnailUrl,
+        };
       }
       return processed;
     },
-    {} as Record<number, string>,
+    {} as Record<number, GameImage>,
   );
 };
