@@ -14,26 +14,3 @@
 .stats > p:last-of-type {
   margin-bottom: 16px;
 }
-
-.entry {
-  margin-bottom: 32px;
-}
-
-.entryBody {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-}
-
-.gameImage {
-  width: 75px;
-  height: 75px;
-  object-fit: cover;
-}
-
-.descriptionBox {
-  width: 100%;
-  min-height: 75px;
-  resize: vertical;
-  font-size: 16px;
-}

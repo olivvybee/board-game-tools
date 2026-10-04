@@ -5,10 +5,12 @@ import { CopyToClipboardButton } from '@/components/CopyToClipboardButton';
 
 import { processPlays } from './processPlays';
 import { fetchGameImages } from './fetchGameImages';
-import { addMarkupToDay } from './addMarkupToGame';
+import { getMarkupForDay } from './addMarkupToGame';
 
 import styles from './page.module.css';
 import { getStats } from './getStats';
+import { useLocalStorage } from 'usehooks-ts';
+import { EntryList } from './EntryList';
 
 const SolotoberPage = async () => {
   loadEnv({ quiet: true });
@@ -26,10 +28,6 @@ const SolotoberPage = async () => {
   const solotoberDays = processPlays(plays, year);
 
   const gameImages = await fetchGameImages(client, solotoberDays);
-
-  const daysWithMarkup = solotoberDays.map((day) =>
-    addMarkupToDay(day, gameImages),
-  );
 
   const stats = getStats(solotoberDays);
 
@@ -49,38 +47,7 @@ const SolotoberPage = async () => {
 
       <p className={styles.heading}>Daily log</p>
 
-      {daysWithMarkup.map((data) => {
-        const imageUrl = gameImages[data.gameId].url;
-
-        return (
-          <div className={styles.entry} key={`${data.day}-${data.gameId}`}>
-            <p className={styles.entryHeader}>
-              <strong>
-                {data.day.toString().padStart(2, '0')} -{' '}
-                <a href={`https://boardgamegeek.com/thing/${data.gameId}`}>
-                  {data.gameName}
-                </a>
-              </strong>
-
-              {data.isNewGame ? ' 🆕' : data.isNewSoloGame ? ' 1️⃣' : ''}
-            </p>
-
-            <div className={styles.entryBody}>
-              <img className={styles.gameImage} src={imageUrl} />
-              <textarea
-                className={styles.descriptionBox}
-                value="Description goes here"
-              />
-            </div>
-
-            <pre>{data.markup}</pre>
-            <CopyToClipboardButton
-              value={data.markup}
-              text="Copy to clipboard"
-            />
-          </div>
-        );
-      })}
+      <EntryList year={year} days={solotoberDays} gameImages={gameImages} />
     </div>
   );
 };
