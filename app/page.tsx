@@ -15,6 +15,9 @@ const Homepage = () => (
       <li>
         <Link href="/emoji-shelf">Emoji shelf builder</Link>
       </li>
+      <li>
+        <Link href="/solotober">Solotober</Link>
+      </li>
     </ul>
   </div>
 );
