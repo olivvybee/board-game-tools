@@ -1,0 +1,16 @@
+.heading {
+  border-bottom: 1px dashed #c0c5c8;
+  font-weight: bold;
+}
+
+.stats {
+  margin-bottom: 32px;
+}
+
+.stats > p {
+  margin: 0;
+}
+
+.stats > p:last-of-type {
+  margin-bottom: 16px;
+}

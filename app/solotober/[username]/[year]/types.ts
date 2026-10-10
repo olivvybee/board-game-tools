@@ -1,6 +1,4 @@
-import { Play } from '@/data-sources/bgg/entities/Play';
-
-export type SolotoberDay = {
+export type SolotoberPlay = {
   day: number;
   gameId: number;
   gameName: string;

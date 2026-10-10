@@ -3,18 +3,19 @@
 import { useLocalStorage } from 'usehooks-ts';
 
 import { CopyToClipboardButton } from '@/components/CopyToClipboardButton';
+import { GameImage, SolotoberPlay } from '../types';
 
-import { getMarkupForDay } from './addMarkupToGame';
-import { GameImage, SolotoberDay } from './types';
+import { getMarkupForDay } from './getMarkupForDay';
+
 import styles from './EntryList.module.css';
 
 interface EntryListProps {
   year: number;
-  days: SolotoberDay[];
+  plays: SolotoberPlay[];
   gameImages: Record<number, GameImage>;
 }
 
-export const EntryList = ({ year, days, gameImages }: EntryListProps) => {
+export const EntryList = ({ year, plays, gameImages }: EntryListProps) => {
   const [descriptions, setDescriptions] = useLocalStorage<
     Record<string, string>
   >(`solotober-${year}-descriptions`, {});
@@ -26,25 +27,25 @@ export const EntryList = ({ year, days, gameImages }: EntryListProps) => {
     });
   };
 
-  return days.map((data) => {
-    const uniqueId = `${data.day}-${data.gameId}`;
+  return plays.map((play) => {
+    const uniqueId = `${play.day}-${play.gameId}`;
 
-    const imageUrl = gameImages[data.gameId].url;
+    const imageUrl = gameImages[play.gameId].url;
     const description = descriptions[uniqueId] || 'Description goes here';
 
-    const markup = getMarkupForDay(data, gameImages, description);
+    const markup = getMarkupForDay(play, gameImages, description);
 
     return (
-      <div className={styles.entry} key={`${data.day}-${data.gameId}`}>
+      <div className={styles.entry} key={`${play.day}-${play.gameId}`}>
         <p className={styles.entryHeader}>
           <strong>
-            {data.day.toString().padStart(2, '0')} -{' '}
-            <a href={`https://boardgamegeek.com/thing/${data.gameId}`}>
-              {data.gameName}
+            {play.day.toString().padStart(2, '0')} -{' '}
+            <a href={`https://boardgamegeek.com/thing/${play.gameId}`}>
+              {play.gameName}
             </a>
           </strong>
 
-          {data.isNewGame ? ' 🆕' : data.isNewSoloGame ? ' 1️⃣' : ''}
+          {play.isNewGame ? ' 🆕' : play.isNewSoloGame ? ' 1️⃣' : ''}
         </p>
 
         <div className={styles.entryBody}>

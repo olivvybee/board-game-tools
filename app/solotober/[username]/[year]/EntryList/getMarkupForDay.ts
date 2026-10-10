@@ -1,7 +1,7 @@
-import { GameImage, SolotoberDay } from './types';
+import { GameImage, SolotoberPlay } from '../types';
 
 export const getMarkupForDay = (
-  data: SolotoberDay,
+  data: SolotoberPlay,
   images: Record<number, GameImage>,
   description: string,
 ) => {
